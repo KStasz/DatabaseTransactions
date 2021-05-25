@@ -1,0 +1,36 @@
+﻿
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Kasowanie użytkownika: @people.Name</h5>
+        <button type="button" class="close" @onclick="(() => Cancel.InvokeAsync())" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <dl>
+            <dt>Imię:</dt>
+            <dd>@people.Name</dd>
+            <dt>Nazwisko:</dt>
+            <dd>@people.Surname</dd>
+            <dt>Kraj:</dt>
+            <dd>@people.Country</dd>
+            <dt>Miasto:</dt>
+            <dd>@people.Town</dd>
+            <dt>Kod pocztowy:</dt>
+            <dd>@people.PostCode</dd>
+            <dt>Aktywność:</dt>
+            <dd>@(people.IsActive == true ? "Aktywny" : "Niekatywny")</dd>
+            <dt>Data utworzenia:</dt>
+            <dd>@people.CreationDate.ToShortDateString() @people.CreationDate.ToShortTimeString()</dd>
+        </dl>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@(() => Cancel.InvokeAsync())">Anuluj</button>
+        <button type="submit" class="btn btn-danger" @onclick="@(() => Save.InvokeAsync(people))">Usuń</button>
+    </div>
+
+@code {
+    [Parameter] public EventCallback<object> Cancel { get; set; }
+    [Parameter] public EventCallback<People> Save { get; set; }
+    [Parameter] public People people { get; set; }
+
+}

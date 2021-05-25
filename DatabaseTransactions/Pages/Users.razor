@@ -1,0 +1,61 @@
+﻿@page "/users"
+
+@if (actualModalState == ModalState.show)
+{
+    <div class="@ModalClass" style="@ModalStyle" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                @if (actualActionState == ActionState.Create || actualActionState == ActionState.Update)
+                {
+                    <PeopleAdd people="selectedPeople" Cancel="HideModal" Save="SaveModalChanges" />
+                }
+                else if (actualActionState == ActionState.Delete)
+                {
+                    <PeopleDelete people="selectedPeople" Cancel="HideModal" Save="SaveModalChanges"/>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <button type="button" class="btn btn-success mr-5 ml-auto mb-3" @onclick="@(() => AddUser())">Utwórz nowego użytkownika</button>
+</div>
+<table class="table table-striped border">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Imię</th>
+            <th scope="col">Nazwisko</th>
+            <th scope="col">Kraj</th>
+            <th scope="col">Miasto</th>
+            <th scope="col">Kod pocztowy</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    @{
+        int counter = 1;
+    }
+    <tbody>
+        @foreach (var item in peoples)
+        {
+            <tr>
+                <td scope="row">@counter</td>
+                <td>@item.Name</td>
+                <td>@item.Surname</td>
+                <td>@item.Country</td>
+                <td>@item.Town</td>
+                <td>@item.PostCode</td>
+                <td>@(item.IsActive == true ? "Aktywny" : "Nieaktywny")</td>
+                <td>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" @onclick="@(() => AddUser(item))">Edycja</button>
+                        <button type="button" class="btn btn-danger" @onclick="@(() => RemoveUser(item))">Usuń</button>
+                    </div>
+                </td>
+            </tr>
+            counter++;
+        }
+    </tbody>
+</table>

@@ -1,0 +1,58 @@
+﻿<EditForm Model="@people" OnSubmit="FormSubmitted">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Zarządzanie użytkownikiem</h5>
+        <button type="button" class="close" @onclick="(() => Cancel.InvokeAsync())" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label for="name">Imię</label>
+            <InputText @bind-Value="people.Name" id="name" type="text" class="form-control" placeholder="Wprowadź imię" />
+            <ValidationMessage For="() => people.Name" />
+        </div>
+        <div class="form-group">
+            <label for="surname">Nazwisko</label>
+            <InputText id="surname" type="text" @bind-Value="people.Surname" class="form-control" placeholder="Wprowadź Nazwisko" />
+            <ValidationMessage For="() => people.Surname" />
+        </div>
+        <div class="form-group">
+            <label for="town">Miasto</label>
+            <InputText type="text" id="town" @bind-Value="people.Town" class="form-control" placeholder="Wprowadź miasto" />
+            <ValidationMessage For="() => people.Town" />
+        </div>
+        <div class="form-group">
+            <label for="country">Państwo</label>
+            <InputText type="text" id="country" @bind-Value="people.Country" class="form-control" placeholder="Wprowadź państwo" />
+            <ValidationMessage For="() => people.Country" />
+        </div>
+        <div class="form-group">
+            <label for="postal">Kod pocztowy</label>
+            <InputText type="text" id="postal" @bind-Value="people.PostCode" class="form-control" placeholder="Wprowadź kod pocztowy" />
+        </div>
+        <div class="form-group form-check">
+            <InputCheckbox id="activity" @bind-Value="people.IsActive" class="form-check-input" />
+            <label class="form-check-label" for="activity">Aktywność</label>
+        </div>
+        <DataAnnotationsValidator />
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@(() => Cancel.InvokeAsync())">Anuluj</button>
+        <button type="submit" class="btn btn-primary">Zapisz</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public EventCallback<object> Cancel { get; set; }
+    [Parameter] public EventCallback<People> Save { get; set; }
+    [Parameter] public People people { get; set; }
+
+    async void FormSubmitted(EditContext editContext)
+    {
+        if (editContext.Validate() == true)
+        {
+            var localpeople = (People)editContext.Model;
+            await Save.InvokeAsync(localpeople);
+        }
+    }
+}
